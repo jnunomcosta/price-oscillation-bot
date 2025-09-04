@@ -2,6 +2,10 @@ import axios from "axios";
 
 /**
  * Class responsible for fetching data from a provided Url.
+ * 
+ * TODO: This class can be extended in the future to support
+ * authentication, retries, etc. The URL Can also be injected via
+ * method and be able to be more versatile.
  */
 export class FetchData {
     // {string}
