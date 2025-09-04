@@ -82,7 +82,7 @@ async function main() {
 	var shutdownCallback = () => {
 		console.log("\nShutting down bot...");
 		engineManager.stopEngines();
-		console.log("Engines shutdown successfully.");
+		console.log("Engines were shut down successfully.");
 		process.exit(0);
 	};
 
