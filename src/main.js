@@ -32,8 +32,8 @@ async function main() {
 	 */
 	const cUpholdUrl = "https://api.uphold.com/v0/ticker/";
 	const cTickerToTrack = "BTC-USD";
-	const cEngineFrequency = 5000;
-	const cPriceVarianceThreshold = 0.01 / 100;
+	const cEngineFrequency = 5000; // in milliseconds (ms).
+	const cPriceVarianceThreshold = 0.01 / 100; // 0.01% expressed in decimal.
 
 	// Create the fetch data object with the uphold url.
 	var fetchData = new FetchData(cUpholdUrl);
