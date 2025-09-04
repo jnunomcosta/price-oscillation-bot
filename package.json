@@ -4,7 +4,7 @@
   "description": "Currency Price Oscillation Bot",
   "main": "src/main.js",
   "scripts": {
-    "start": "node src/main.js",
+    "start": "node src/main.js --config test/dummyConfig/dummyConfig.json",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage --detectOpenHandles",
     "lint": "eslint ."
   },
@@ -34,6 +34,8 @@
     "jest": "^30.1.3"
   },
   "dependencies": {
-    "axios": "^1.11.0"
+    "ajv": "^8.17.1",
+    "axios": "^1.11.0",
+    "commander": "^14.0.0"
   }
 }
