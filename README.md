@@ -23,6 +23,7 @@ A Node.js bot that monitors currency price oscillations using the [Uphold API](h
 - [Configuration](#configuration)
 - [Architecture](#architecture)
 - [Development](#development)
+- [Example Output](#example-output)
 
 ---
 
@@ -90,6 +91,9 @@ const cPriceVarianceThreshold = 0.01 / 100; // 0.01%
   - ``Engine.js:`` Periodic task runner.
   - ``EngineManager.js:`` Manages multiple engines.
 - **src/main.js:** Entry point, wiring everything together.
+
+The following is a manually made entity diagram that attempts to show how the various entities communicate with each other.
+![Entity Diagram](media/entity_diagram.jpeg)
 
 ## Development
 
