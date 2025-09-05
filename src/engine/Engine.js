@@ -2,6 +2,9 @@
  * Engine class, responsible for having the having a start and stop
  * function that while running calls given callbacks for a certain 
  * amount of time given to it.
+ * 
+ * TODO: This class can be extended in the future to support different
+ * types / modes of engines, with different strategies.
  */
 export class Engine {
     // {number}

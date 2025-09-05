@@ -20,7 +20,7 @@ describe("FetchDataTests", () => {
     test("Fetch Data returns the correct data on successful request", () => {
         // Configure the Mock response
         const priceData = { ask: 123, bid: 456, currency: "USD" };
-        var mock = new MockAdapter(axios, 1000);
+        var mock = new MockAdapter(axios);
 
         var fetchData = new FetchData(cUrl, cTimeout);
 
@@ -40,7 +40,7 @@ describe("FetchDataTests", () => {
     test("Fetch Data returns an error in a http get status failure", () => {
         // Configure the Mock response
         const priceData = {};
-        var mock = new MockAdapter(axios, 1000);
+        var mock = new MockAdapter(axios);
 
         var fetchData = new FetchData(cUrl, cTimeout);
 
