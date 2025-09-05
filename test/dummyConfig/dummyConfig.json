@@ -1,0 +1,25 @@
+{
+    "url": "https://api.uphold.com/v0/ticker/",
+    "currenciesToTrack": [
+        {
+            "currencyPairTicker": "BTC-USD",
+            "fetchInterval": 5000,
+            "priceOscillationPercentage": 0.001
+        },
+        {
+            "currencyPairTicker": "BTC-EUR",
+            "fetchInterval": 5000,
+            "priceOscillationPercentage": 0.005
+        },
+        {
+            "currencyPairTicker": "BTC-ETH",
+            "fetchInterval": 2500,
+            "priceOscillationPercentage": 0.01
+        },
+        {
+            "currencyPairTicker": "USD-EUR",
+            "fetchInterval": 1000,
+            "priceOscillationPercentage": 0.00001
+        }
+    ]
+}
