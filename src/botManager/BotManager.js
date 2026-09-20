@@ -3,6 +3,7 @@ import { FetchData } from "../backendConnection/FetchData.js";
 import { EngineManager } from "../engine/EngineManager.js";
 import { parseArguments } from "../argumentParser/ArgumentParser.js"
 import { loadConfig } from "../configLoader/ConfigLoader.js"
+import { UpholdProvider } from "../priceProvider/UpholdProvider.js"
 
 // Define the command line argument options.
 const cArgumentOptions = [{ flags: '-c, --config <path>', description: 'Path to config file' }];
@@ -77,27 +78,29 @@ export async function runBot() {
         process.exit(1);
     }
 
-    // Create the fetch data object with the configuration url.
-    var fetchData = new FetchData(configObject.url);
+    // Create the fetch data object, and the price provider that knows how to
+    // build Urls and extract prices for the configured backend.
+    var fetchData = new FetchData();
+    var priceProvider = new UpholdProvider(configObject.url);
 
     // Create the analyze manager and pass to it the ticker and price variance we
     // want to analyze.
     var analyzeManager = new AnalyzeManager(priceAlert);
 
     // Create the engine operation callback. This function calls fetchData
-    // to get the latest price from Uphold API and after it resolves the
-    // call it passes the data to the analyze manager for analysis. In
-    // case of error, a log is performed and no analysis is made.
+    // to get the latest price from the price provider's Url and after it
+    // resolves extracts the price and passes it to the analyze manager for
+    // analysis. In case of a fetch or extraction error, a log is performed
+    // and no analysis is made.
     var engineOperationCallback = (ticker) => {
-        /**
-         * TODO: The fetchData function can be modified to recieve the 
-         * url and ticker as parameters, so that we can have more than
-         * one Url connection via configuration.
-         */
-        fetchData.fetchData(ticker)
+        fetchData.fetchData(priceProvider.buildUrl(ticker))
             .then(
                 response => {
-                    analyzeManager.analyzePrice(ticker, response.ask);
+                    try {
+                        analyzeManager.analyzePrice(ticker, priceProvider.extractPrice(response));
+                    } catch (error) {
+                        console.log("Error extracting price for ticker " + ticker + " - " + error.message);
+                    }
                 },
                 error => {
                     console.log("Error on HTTP Get operation for ticker " + ticker + " - " + error);
