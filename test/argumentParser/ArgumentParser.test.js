@@ -1,5 +1,5 @@
 import { describe, test, expect, jest } from '@jest/globals';
-import { parseArguments } from '../../src/argumentParser/argumentParser.js';
+import { parseArguments } from '../../src/argumentParser/ArgumentParser.js';
 
 /**
  * Test Suite for the argument parser functions.
