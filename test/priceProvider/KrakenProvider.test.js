@@ -69,12 +69,36 @@ describe("KrakenProviderTests", () => {
     });
 
     /**
+     * Tests that extractPrice throws when the result field is missing
+     * entirely, rather than throwing while reading its keys.
+     */
+    test("KrakenProvider extractPrice throws when the result field is missing", () => {
+        var provider = new KrakenProvider(cUrl);
+
+        expect(() => provider.extractPrice({ error: [] })).toThrow(
+            "Kraken response is missing a result entry.");
+    });
+
+    /**
      * Tests that extractPrice throws when the ask array is missing.
      */
     test("KrakenProvider extractPrice throws when the ask array is missing", () => {
         var provider = new KrakenProvider(cUrl);
 
         const responseBody = { error: [], result: { XXBTZUSD: {} } };
+
+        expect(() => provider.extractPrice(responseBody)).toThrow(
+            "Kraken response is missing a valid ask price.");
+    });
+
+    /**
+     * Tests that extractPrice throws when the ask value present in the
+     * response cannot be converted to a number.
+     */
+    test("KrakenProvider extractPrice throws when the ask value is not numeric", () => {
+        var provider = new KrakenProvider(cUrl);
+
+        const responseBody = { error: [], result: { XXBTZUSD: { a: ["not-a-number", "1", "1.0"] } } };
 
         expect(() => provider.extractPrice(responseBody)).toThrow(
             "Kraken response is missing a valid ask price.");

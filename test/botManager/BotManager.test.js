@@ -38,12 +38,17 @@ describe("MainFunctionTests", () => {
 
     /**
      * Clears any engines left running by a previous test, so their timers do
-     * not fire (and interfere) during a later, unrelated test, and restores
-     * spies so call counts do not leak between tests either.
+     * not fire (and interfere) during a later, unrelated test, restores
+     * spies so call counts do not leak between tests, and removes the
+     * SIGINT/SIGTERM listeners each runBot() call registers, so a later
+     * test's process.emit does not also re-trigger an earlier test's
+     * shutdown callback.
      */
     afterEach(() => {
         jest.clearAllTimers();
         jest.restoreAllMocks();
+        process.removeAllListeners("SIGINT");
+        process.removeAllListeners("SIGTERM");
     });
 
     /**
@@ -414,8 +419,25 @@ describe("MainFunctionTests", () => {
     });
 
     /**
-     * TODO: Tests that the bot run can detect an empty config and exit the process.
+     * Tests that the bot run function detects an empty currenciesToTrack
+     * list and exits non-zero rather than starting with nothing to watch.
      */
+    test("Bot Run function exits when the config has no currencies to track", async () => {
+        const dummyConfig = {
+            providers: { "uphold-main": { type: "uphold", url: cUpholdUrl } },
+            currenciesToTrack: []
+        };
+
+        const configFile = await writeAndUseConfig(dummyConfig);
+        const exitSpy = jest.spyOn(process, 'exit').mockImplementation(() => { });
+
+        await runBot();
+
+        expect(exitSpy).toHaveBeenCalledWith(1);
+
+        exitSpy.mockRestore();
+        await unlink(configFile).catch(() => { });
+    });
 
     /**
      * TODO: Tests that the bot run can detect a malformed config file and exit.
@@ -426,7 +448,69 @@ describe("MainFunctionTests", () => {
      */
 
     /**
-     * TODO: Tests that the bot can detect the exit symbols and gracefully close.
+     * Tests that a fetch data (HTTP get) error is logged, identifying the
+     * provider and ticker, and that no price analysis is performed.
      */
+    test("Bot Run function logs and continues on a fetch data error", async () => {
+        const dummyCurrency = {
+            provider: "uphold-main", currencyPairTicker: "BTC-USD", fetchInterval: 1000, priceOscillationPercentage: 0.01
+        };
+        const dummyConfig = {
+            providers: { "uphold-main": { type: "uphold", url: cUpholdUrl } },
+            currenciesToTrack: [dummyCurrency]
+        };
+
+        const configFile = await writeAndUseConfig(dummyConfig);
+        var axiosMock = new MockAdapter(axios);
+        const logSpy = jest.spyOn(console, 'log');
+
+        await runBot();
+
+        const upholdUrl = cUpholdUrl + dummyCurrency.currencyPairTicker;
+        axiosMock.onGet(upholdUrl).networkError();
+        await jest.advanceTimersByTimeAsync(1000);
+
+        expect(logSpy).toHaveBeenCalledWith(expect.stringContaining("Error on HTTP Get operation for provider uphold-main and ticker BTC-USD"));
+
+        await unlink(configFile).catch(() => { });
+    });
+
+    /**
+     * Tests that the bot can detect the SIGINT/SIGTERM exit symbols and
+     * gracefully close, stopping every engine and exiting with code 0.
+     */
+    test("Bot Run function gracefully shuts down on SIGINT", async () => {
+        const dummyCurrency = {
+            provider: "uphold-main", currencyPairTicker: "BTC-USD", fetchInterval: 1000, priceOscillationPercentage: 0.01
+        };
+        const dummyConfig = {
+            providers: { "uphold-main": { type: "uphold", url: cUpholdUrl } },
+            currenciesToTrack: [dummyCurrency]
+        };
+
+        const configFile = await writeAndUseConfig(dummyConfig);
+        var axiosMock = new MockAdapter(axios);
+        const logSpy = jest.spyOn(console, 'log');
+        const exitSpy = jest.spyOn(process, 'exit').mockImplementation(() => { });
+
+        await runBot();
+
+        // Trigger the shutdown callback registered for SIGINT.
+        process.emit("SIGINT");
+
+        expect(logSpy).toHaveBeenCalledWith(expect.stringContaining("Shutting down bot..."));
+        expect(logSpy).toHaveBeenCalledWith(expect.stringContaining("Engines were shut down successfully."));
+        expect(exitSpy).toHaveBeenCalledWith(0);
+
+        // Advancing time after shutdown must not fetch or alert, since every
+        // engine was stopped.
+        const upholdUrl = cUpholdUrl + dummyCurrency.currencyPairTicker;
+        axiosMock.onGet(upholdUrl).reply(200, { ask: 999 });
+        await jest.advanceTimersByTimeAsync(1000);
+        expect(axiosMock.history.get.length).toEqual(0);
+
+        exitSpy.mockRestore();
+        await unlink(configFile).catch(() => { });
+    });
 
 });
