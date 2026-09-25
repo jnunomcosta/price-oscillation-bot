@@ -8,9 +8,7 @@ import { FetchData } from "../../src/backendConnection/FetchData.js";
  */
 describe("FetchDataTests", () => {
     // Common test constants.
-    const cUrl = "dummyUrl/";
-    const cUrlAppendix = "ticker"
-    const cGetUrl = cUrl + cUrlAppendix;
+    const cUrl = "dummyUrl/ticker";
     const cTimeout = 1500;
 
     /**
@@ -22,11 +20,11 @@ describe("FetchDataTests", () => {
         const priceData = { ask: 123, bid: 456, currency: "USD" };
         var mock = new MockAdapter(axios);
 
-        var fetchData = new FetchData(cUrl, cTimeout);
+        var fetchData = new FetchData(cTimeout);
 
-        mock.onGet(cGetUrl).reply(200, priceData);
+        mock.onGet(cUrl).reply(200, priceData);
 
-        fetchData.fetchData(cUrlAppendix).then(response => {
+        fetchData.fetchData(cUrl).then(response => {
             expect(response.ask).toEqual(priceData.ask);
             expect(response.bid).toEqual(priceData.bid);
             expect(response.currency).toEqual(priceData.currency);
@@ -42,12 +40,12 @@ describe("FetchDataTests", () => {
         const priceData = {};
         var mock = new MockAdapter(axios);
 
-        var fetchData = new FetchData(cUrl, cTimeout);
+        var fetchData = new FetchData(cTimeout);
 
         const notFoundStatus = 404;
-        mock.onGet(cGetUrl).reply(notFoundStatus, priceData);
+        mock.onGet(cUrl).reply(notFoundStatus, priceData);
 
-        fetchData.fetchData(cUrlAppendix).catch(error => {
+        fetchData.fetchData(cUrl).catch(error => {
             expect(error).toEqual("Request failed with status code " + notFoundStatus);
         });
     });
@@ -59,11 +57,11 @@ describe("FetchDataTests", () => {
     test("Fetch Data returns an error in a http get timeout", () => {
         var mock = new MockAdapter(axios);
 
-        var fetchData = new FetchData(cUrl);
+        var fetchData = new FetchData();
 
-        mock.onGet(cGetUrl).timeout();
+        mock.onGet(cUrl).timeout();
 
-        fetchData.fetchData(cUrlAppendix).catch(error => {
+        fetchData.fetchData(cUrl).catch(error => {
             expect(error).toEqual("timeout of 1000ms exceeded");
         });
     });

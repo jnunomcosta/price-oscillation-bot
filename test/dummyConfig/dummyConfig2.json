@@ -1,7 +1,10 @@
 {
-    "url": "https://api.uphold.com/v0/ticker/",
+    "providers": {
+        "uphold-main": { "type": "uphold" }
+    },
     "currenciesToTrack": [
         {
+            "provider": "uphold-main",
             "currencyPairTicker": "USD-GBP",
             "fetchInterval": 1000,
             "priceOscillationPercentage": 0.00001

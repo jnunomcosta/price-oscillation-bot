@@ -1,25 +1,52 @@
 {
-    "url": "https://api.uphold.com/v0/ticker/",
+    "providers": {
+        "uphold-main": { "type": "uphold" },
+        "coinbase-main": { "type": "coinbase" },
+        "kraken-main": { "type": "kraken" },
+        "binance-main": { "type": "binance" }
+    },
     "currenciesToTrack": [
         {
+            "provider": "uphold-main",
             "currencyPairTicker": "BTC-USD",
             "fetchInterval": 5000,
             "priceOscillationPercentage": 0.001
         },
         {
+            "provider": "uphold-main",
             "currencyPairTicker": "BTC-EUR",
             "fetchInterval": 5000,
             "priceOscillationPercentage": 0.005
         },
         {
+            "provider": "uphold-main",
             "currencyPairTicker": "BTC-ETH",
             "fetchInterval": 2500,
             "priceOscillationPercentage": 0.01
         },
         {
+            "provider": "uphold-main",
             "currencyPairTicker": "USD-EUR",
             "fetchInterval": 1000,
             "priceOscillationPercentage": 0.00001
+        },
+        {
+            "provider": "coinbase-main",
+            "currencyPairTicker": "BTC-USD",
+            "fetchInterval": 5000,
+            "priceOscillationPercentage": 0.001
+        },
+        {
+            "provider": "kraken-main",
+            "currencyPairTicker": "XBTUSD",
+            "fetchInterval": 5000,
+            "priceOscillationPercentage": 0.001
+        },
+        {
+            "provider": "binance-main",
+            "currencyPairTicker": "BTCUSDT",
+            "fetchInterval": 5000,
+            "priceOscillationPercentage": 0.001
         }
     ]
 }

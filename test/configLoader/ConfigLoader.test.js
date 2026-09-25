@@ -1,5 +1,5 @@
 import { describe, test, expect, afterEach } from '@jest/globals';
-import { loadConfig } from "../../src/configLoader/configLoader.js";
+import { loadConfig } from "../../src/configLoader/ConfigLoader.js";
 import { writeFile, unlink } from "fs/promises";
 
 /**

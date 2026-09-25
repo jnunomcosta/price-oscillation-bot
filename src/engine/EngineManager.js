@@ -17,10 +17,12 @@ export class EngineManager {
     /**
      * Engine Manager class constructor.
      * 
-     * @param {function} pOperationCallback 
-     *      The operation callback that will be called by the 
+     * @param {function} pOperationCallback
+     *      The operation callback that will be called by the
      *      several engines. This callback is expected to have
-     *      the following signature: function (string arg) : void.
+     *      the following signature: function (any arg) : void,
+     *      where "arg" is whatever pOperationCallbackInputs was
+     *      given to createEngine for that engine.
      */
     constructor(pOperationCallback) {
         this.#mEngines = new Map();
