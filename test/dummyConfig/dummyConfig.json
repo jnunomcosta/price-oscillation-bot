@@ -1,6 +1,9 @@
 {
     "providers": {
-        "uphold-main": { "type": "uphold" }
+        "uphold-main": { "type": "uphold" },
+        "coinbase-main": { "type": "coinbase" },
+        "kraken-main": { "type": "kraken" },
+        "binance-main": { "type": "binance" }
     },
     "currenciesToTrack": [
         {
@@ -26,6 +29,24 @@
             "currencyPairTicker": "USD-EUR",
             "fetchInterval": 1000,
             "priceOscillationPercentage": 0.00001
+        },
+        {
+            "provider": "coinbase-main",
+            "currencyPairTicker": "BTC-USD",
+            "fetchInterval": 5000,
+            "priceOscillationPercentage": 0.001
+        },
+        {
+            "provider": "kraken-main",
+            "currencyPairTicker": "XBTUSD",
+            "fetchInterval": 5000,
+            "priceOscillationPercentage": 0.001
+        },
+        {
+            "provider": "binance-main",
+            "currencyPairTicker": "BTCUSDT",
+            "fetchInterval": 5000,
+            "priceOscillationPercentage": 0.001
         }
     ]
 }
