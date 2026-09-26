@@ -440,14 +440,6 @@ describe("MainFunctionTests", () => {
     });
 
     /**
-     * TODO: Tests that the bot run can detect a malformed config file and exit.
-     */
-
-    /**
-     * TODO: Tests that the bot run can detect wrong user arguments and exit the process.
-     */
-
-    /**
      * Tests that a fetch data (HTTP get) error is logged, identifying the
      * provider and ticker, and that no price analysis is performed.
      */

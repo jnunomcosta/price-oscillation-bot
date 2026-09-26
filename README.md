@@ -1,6 +1,4 @@
-# uphold-bot
-
-## Currency Price Oscillation Bot
+# Currency Price Oscillation Bot
 
 A Node.js bot that monitors currency price oscillations across [Uphold](https://uphold.com/en/developer/api/documentation/), [Coinbase](https://docs.cloud.coinbase.com/exchange/reference), [Kraken](https://docs.kraken.com/rest/) and [Binance](https://binance-docs.github.io/apidocs/spot/en/), and triggers alerts when price changes exceed a configurable threshold.
 
@@ -134,9 +132,6 @@ clearly distinguishable alerts.
   - ``BotManager.js:`` Instantiates every class and callback. Orchestrates the program.
 - **src/main.js:** Entry point of the bot.
 
-The following is a manually made entity diagram that attempts to show how the various entities communicate with each other.
-![Entity Diagram](media/entity_diagram_phase2.jpeg)
-
 ## Development
 
 - Lint code:
@@ -160,25 +155,3 @@ npm run test
 New Price Alert 🚨 on uphold-main:BTC-USD! Price at: 109623.0791731246, variation of -0.0128% previous alert price: 109637.1122434467 with timestamp: 1757004000464
 ``
 
-## Future Work
-
-Some TODOs were left throughout the code to indicate future feature expandability of the bot. Such as:
-
-- Support API authentication.
-- Changing Engine Execution Type. Stopping and starting engines during execution.
-- Supporting different alert types, such as database writes.
-- Supporting more
-
-The application can be dockerized by creating a Dockerfile file, with a node image, mounting the project code,
-installing the dependencies and executing docker run passing the desired configuration. In the future the
-config can be provided via an environment variable to facilitate runnability.
-
-A postgres database can be integrated, creating a table for "Bot Config" with a url and ticker as primary keys
-and the rest of the bot configuration as data, fetch interval, oscillation, etc. Then in each alert we would
-have our own alert table and have the reference to the respective bot config and write that alert into its own
-table with the price alert information.
-For example the "pg" module could be used to create the necessary tables in the database and write the necessary
-data there.
-
-Everything could later be joined using docker-compose, to set up the database container and the bot container,
-and run both programs.

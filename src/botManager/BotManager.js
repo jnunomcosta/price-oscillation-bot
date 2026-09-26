@@ -9,12 +9,6 @@ import { PriceProviderFactory } from "../priceProvider/PriceProviderFactory.js"
 const cArgumentOptions = [{ flags: '-c, --config <path>', description: 'Path to config file' }];
 
 // Define the JSON schema for the config file.
-/**
- * TODO: This schema can be expanded in the future to include more
- * configuration options.
- * For example, alert type, database connection configuration,
- * engine execution type, etc.
- */
 const cConfigSchema = {
     type: "object",
     properties: {
@@ -55,9 +49,6 @@ const cConfigSchema = {
  *
  * @param {PriceAlert} pPrice
  * 		The price alert object with all of the price information.
- *
- * TODO: This function can be modified to connect to a database and store
- * the price alert information there.
  */
 export function priceAlert(pPrice) {
     console.log("New Price Alert 🚨 on " + pPrice.getCurrencyPair() +

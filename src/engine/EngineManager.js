@@ -3,10 +3,6 @@ import { Engine } from "./Engine.js";
 /**
  * Engine Manager class, responsible for managing the various
  * Engine instances.
- * 
- * TODO: This class can be extended in the future to support
- * starting / stopping / removal of individual engines, as well 
- * as creating new types of engines underneath.
  */
 export class EngineManager {
     // {map}

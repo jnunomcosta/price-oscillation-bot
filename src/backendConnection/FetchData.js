@@ -2,9 +2,6 @@ import axios from "axios";
 
 /**
  * Class responsible for performing an http get on a fully formed Url.
- *
- * TODO: This class can be extended in the future to support
- * authentication, retries, etc.
  */
 export class FetchData {
     // {number}
